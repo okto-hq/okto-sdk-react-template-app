@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useOkto } from "okto-sdk-react";
 import { GoogleLogin } from "@react-oauth/google";
-import axios from "axios";
 
 function LoginPage() {
 
@@ -22,23 +21,6 @@ function LoginPage() {
     margin: '0 auto',
   };
 
-  const apiService = axios.create({
-    baseURL: BASE_URL,
-    headers: {
-      "x-api-key": OKTO_CLIENT_API,
-      "Content-Type": "application/json",
-    },
-  });
-
-  const setPin = (idToken, token, reloginPin) => {
-    return apiService.post("/api/v1/set_pin", {
-      id_token: idToken,
-      token: token,
-      relogin_pin: reloginPin,
-      purpose: "set_pin",
-    });
-  };
-
   const handleGoogleLogin = async (credentialResponse) => {
     console.log("Google login response:", credentialResponse);
     const idToken = credentialResponse.credential;
@@ -47,16 +29,6 @@ function LoginPage() {
       if (authResponse) {
         console.log("Authentication check: ", authResponse);
         setAuthToken(authResponse.auth_token);
-        // if (!authToken && authResponse.action === "signup") {
-        //   console.log("User Signup");
-        //   const pinToken = authResponse.token;
-        //   await setPin(idToken, pinToken, "0000");
-        //   await authenticate(idToken, async (res, err) => {
-        //     if (res) {
-        //       setAuthToken(res.auth_token);
-        //     }
-        //   });
-        // }
         console.log("auth token received", authToken);
         navigate("/home");
       }
