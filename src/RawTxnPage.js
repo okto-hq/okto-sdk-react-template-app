@@ -1,13 +1,11 @@
 import React, { useState } from "react";
 import { useOkto } from "okto-sdk-react";
 import { useNavigate } from "react-router-dom";
+import ReadData from './ReadData';
 
-function RawTxnPage() {
-  console.log("raw txn page component rendered");
+const RawTxnPage = ({ authToken, handleLogout }) => {
+  console.log("raw txn page component rendered: ", authToken);
   const navigate = useNavigate();
-  const [userDetails, setUserDetails] = useState(null);
-  const [portfolioData, setPortfolioData] = useState(null);
-  const [wallets, setWallets] = useState(null);
   const [transferResponse, setTransferResponse] = useState(null);
   const [orderResponse, setOrderResponse] = useState(null);
   const [error, setError] = useState(null);
@@ -21,43 +19,7 @@ function RawTxnPage() {
     order_id: "",
   });
 
-  const fetchUserDetails = async () => {
-    try {
-      const details = await getUserDetails();
-      setUserDetails(details);
-      setActiveSection('userDetails');
-    } catch (error) {
-      setError(`Failed to fetch user details: ${error.message}`);
-    }
-  };
-  const fetchPortfolio = async () => {
-    try {
-      const portfolio = await getPortfolio();
-      setPortfolioData(portfolio);
-      setActiveSection('portfolio');
-    } catch (error) {
-      setError(`Failed to fetch portfolio: ${error.message}`);
-    }
-  };
-  const fetchWallets = async () => {
-    try {
-      const walletsData = await createWallet();
-      console.log(walletsData)
-      setWallets(walletsData);
-      setActiveSection('wallets');
-    } catch (error) {
-      setError(`Failed to fetch wallets: ${error.message}`);
-    }
-  };
 
-  const navHome = async () => {
-    try {
-      console.log("going to rax txn page");
-      navigate("/home");
-    } catch (error) {
-      setError(`Failed to navigate: ${error.message}`);
-    }
-  };
 
   const handleRawTxnExecute = async (e) => {
     console.log("handling exe")
@@ -77,6 +39,10 @@ function RawTxnPage() {
       setError(`Failed to transfer tokens: ${error.message}`);
     }
   };
+
+  // sample raw txn data for evm
+  // {      "from": "0xdca7F8E25091B927DB769337d7eFDedBf772bb9A",      "to": "0xCDAC489b062A5d057Bd15DdE758829eCF3A14e5B",      "data": "0x",      "value": "0x100000"}
+
 
   const handleInputChange = (e) => {
     setTransferData({ ...transferData, [e.target.name]: e.target.value });
@@ -125,33 +91,31 @@ function RawTxnPage() {
     fontSize: '16px',
   };
 
+
+  const navHome = async () => {
+    try {
+      console.log("going to home page");
+      navigate("/home");
+    } catch (error) {
+      setError(`Failed to navigate: ${error.message}`);
+    }
+  };
+
+  const navWidget = async () => {
+    try {
+      console.log("going to widget page");
+      navigate("/widget");
+    } catch (error) {
+      setError(`Failed to navigate: ${error.message}`);
+    }
+  };
+
   return (
     <div style={containerStyle}>
       <h1>Raw Transactions</h1>
       
-      <div>
-        <button style={buttonStyle} onClick={fetchUserDetails}>View User Details</button>
-        <button style={buttonStyle} onClick={fetchPortfolio}>View Portfolio</button>
-        <button style={buttonStyle} onClick={fetchWallets}>View Wallets</button>
-      </div>
-      {activeSection === 'userDetails' && userDetails && (
-        <div>
-          <h2>User Details:</h2>
-          <pre>{JSON.stringify(userDetails, null, 2)}</pre>
-        </div>
-      )}
-      {activeSection === 'portfolio' && portfolioData && (
-        <div>
-          <h2>Portfolio Data:</h2>
-          <pre>{JSON.stringify(portfolioData, null, 2)}</pre>
-        </div>
-      )}
-      {activeSection === 'wallets' && wallets && (
-        <div>
-          <h2>Wallets:</h2>
-          <pre>{JSON.stringify(wallets, null, 2)}</pre>
-        </div>
-      )}
+      {/* Rendering ReadData component and passing handleLogout */}
+      <ReadData handleLogout={handleLogout} authToken={authToken}/>
       <h2>Perform Raw Txn</h2>
       <form style={formStyle} onSubmit={handleRawTxnExecute}>
         <input
@@ -209,6 +173,7 @@ function RawTxnPage() {
         <br/>
         <br/>
         <button style={buttonStyle} onClick={navHome}>go to home</button>
+        <button style={buttonStyle} onClick={navWidget}>Try widgets</button>
       </div>
     </div>
   );

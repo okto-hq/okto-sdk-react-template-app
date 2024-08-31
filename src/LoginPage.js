@@ -3,14 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { useOkto } from "okto-sdk-react";
 import { GoogleLogin } from "@react-oauth/google";
 
-function LoginPage() {
+const LoginPage = ({ setAuthToken, authToken, handleLogout }) => {
 
-  console.log("LoginPage component rendered");
+  console.log("LoginPage component rendered: ", authToken);
   const navigate = useNavigate();
   const { authenticate } = useOkto();
-  const [authToken, setAuthToken] = useState();
-  const BASE_URL = "https://sandbox-api.okto.tech";
-  const OKTO_CLIENT_API = "";
 
   const containerStyle = {
     display: 'flex',
@@ -38,6 +35,11 @@ function LoginPage() {
     });
   };
 
+  const onLogoutClick = () => {
+    handleLogout(); // Clear the authToken
+    navigate('/'); // Navigate back to the login page
+  };
+
   return (
     <div style={containerStyle}>
       <h1>Login</h1>
@@ -53,8 +55,9 @@ function LoginPage() {
           }
         />
       ) : (
-        <> Authenticated </>
+        <button onClick={onLogoutClick}>Authenticated, Logout</button>
       )}
+
     </div>
   );
 }

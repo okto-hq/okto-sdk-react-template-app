@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import { useOkto } from "okto-sdk-react";
 import { useNavigate } from "react-router-dom";
-function HomePage() {
-  console.log("HomePage component rendered");
+import ReadData from './ReadData';
+
+
+const HomePage = ({ authToken, handleLogout }) => {
+  console.log("HomePage component rendered: ", authToken);
   const navigate = useNavigate();
-  const [userDetails, setUserDetails] = useState(null);
-  const [portfolioData, setPortfolioData] = useState(null);
-  const [wallets, setWallets] = useState(null);
   const [transferResponse, setTransferResponse] = useState(null);
   const [orderResponse, setOrderResponse] = useState(null);
   const [error, setError] = useState(null);
   const [activeSection, setActiveSection] = useState(null);
-  const { getUserDetails, getPortfolio, createWallet, transferTokens, orderHistory } = useOkto();
+  const {transferTokens, orderHistory } = useOkto();
   const [transferData, setTransferData] = useState({
     network_name: "",
     token_address: "",
@@ -22,43 +22,7 @@ function HomePage() {
     order_id: "",
   });
 
-  const fetchUserDetails = async () => {
-    try {
-      const details = await getUserDetails();
-      setUserDetails(details);
-      setActiveSection('userDetails');
-    } catch (error) {
-      setError(`Failed to fetch user details: ${error.message}`);
-    }
-  };
-  const fetchPortfolio = async () => {
-    try {
-      const portfolio = await getPortfolio();
-      setPortfolioData(portfolio);
-      setActiveSection('portfolio');
-    } catch (error) {
-      setError(`Failed to fetch portfolio: ${error.message}`);
-    }
-  };
-  const fetchWallets = async () => {
-    try {
-      const walletsData = await createWallet();
-      console.log(walletsData)
-      setWallets(walletsData);
-      setActiveSection('wallets');
-    } catch (error) {
-      setError(`Failed to fetch wallets: ${error.message}`);
-    }
-  };
 
-  const navRawTxn = async () => {
-    try {
-      console.log("going to rax txn page");
-      navigate("/raw");
-    } catch (error) {
-      setError(`Failed to navigate: ${error.message}`);
-    }
-  };
 
   const handleTransferTokens = async (e) => {
     e.preventDefault();
@@ -118,33 +82,31 @@ function HomePage() {
     fontSize: '16px',
   };
 
+  const navRawTxn = async () => {
+    try {
+      console.log("going to rax txn page");
+      navigate("/raw");
+    } catch (error) {
+      setError(`Failed to navigate: ${error.message}`);
+    }
+  };
+
+  const navWidget = async () => {
+    try {
+      console.log("going to widget page");
+      navigate("/widget");
+    } catch (error) {
+      setError(`Failed to navigate: ${error.message}`);
+    }
+  };
+
+
   return (
     <div style={containerStyle}>
       <h1>Home Page</h1>
-      
-      <div>
-        <button style={buttonStyle} onClick={fetchUserDetails}>View User Details</button>
-        <button style={buttonStyle} onClick={fetchPortfolio}>View Portfolio</button>
-        <button style={buttonStyle} onClick={fetchWallets}>View Wallets</button>
-      </div>
-      {activeSection === 'userDetails' && userDetails && (
-        <div>
-          <h2>User Details:</h2>
-          <pre>{JSON.stringify(userDetails, null, 2)}</pre>
-        </div>
-      )}
-      {activeSection === 'portfolio' && portfolioData && (
-        <div>
-          <h2>Portfolio Data:</h2>
-          <pre>{JSON.stringify(portfolioData, null, 2)}</pre>
-        </div>
-      )}
-      {activeSection === 'wallets' && wallets && (
-        <div>
-          <h2>Wallets:</h2>
-          <pre>{JSON.stringify(wallets, null, 2)}</pre>
-        </div>
-      )}
+      {/* Rendering ReadData component and passing handleLogout */}
+      <ReadData handleLogout={handleLogout} authToken={authToken}/>
+
       <h2>Transfer Tokens</h2>
       <form style={formStyle} onSubmit={handleTransferTokens}>
         <input
@@ -220,8 +182,10 @@ function HomePage() {
         <br/>
         <br/>
         <button style={buttonStyle} onClick={navRawTxn}>Try Raw Txn</button>
+        <button style={buttonStyle} onClick={navWidget}>Try widgets</button>
       </div>
     </div>
+    
   );
 }
 export default HomePage;
