@@ -7,7 +7,7 @@ import RawTxnPage from './RawTxnPage';
 import WidgetPage from './WidgetPage';
 
 
-const OKTO_CLIENT_API_KEY = "";
+const OKTO_CLIENT_API_KEY = process.env.REACT_APP_OKTO_CLIENT_API_KEY;
 function App() {
  console.log('App component rendered');
  const [authToken, setAuthToken] = useState(null);
