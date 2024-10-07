@@ -1,4 +1,4 @@
-version: &imageVersion "11178402049"
+version: &imageVersion "11210450775"
 global:
   version: *imageVersion
 okto-sdk-react-template-app:
@@ -15,11 +15,11 @@ okto-sdk-react-template-app:
   deployment:
     resources:
       limits:
-        cpu: 100m
-        memory: 100Mi
+        cpu: 500m
+        memory: 500Mi
       requests:
         cpu: 100m
-        memory: 100Mi
+        memory: 300Mi
     readinessProbe:
       failureThreshold: 10
       httpGet:
