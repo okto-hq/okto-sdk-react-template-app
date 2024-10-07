@@ -51,6 +51,13 @@ okto-sdk-react-template-app:
     enabled: true
     minReplicas: 1
     maxReplicas: 2
+  envFromSecrets:
+    - variable: REACT_APP_OKTO_CLIENT_API_KEY
+      secretId: &oktohq-sdk-docs oktohq/okto-sdk-react-template-app
+      secretKey: REACT_APP_OKTO_CLIENT_API_KEY
+    - variable: REACT_APP_GOOGLE_CLIENT_ID
+      secretId: *oktohq-sdk-docs
+      secretKey: REACT_APP_GOOGLE_CLIENT_ID
   tolerations:
     - effect: NoSchedule
       key: application
