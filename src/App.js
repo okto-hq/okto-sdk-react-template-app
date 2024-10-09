@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { OktoProvider, BuildType } from 'okto-sdk-react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './LoginPage';
 import HomePage from './HomePage';
 import RawTxnPage from './RawTxnPage';
 import WidgetPage from './WidgetPage';
 
 
-const OKTO_CLIENT_API_KEY = "";
+const OKTO_CLIENT_API_KEY = process.env.REACT_APP_OKTO_CLIENT_API_KEY;
 function App() {
  console.log('App component rendered');
  const [authToken, setAuthToken] = useState(null);
