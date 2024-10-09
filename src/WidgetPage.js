@@ -31,19 +31,19 @@ const WidgetPage = ({ authToken, handleLogout }) => {
     fontSize: '16px',
     cursor: 'pointer',
   };
-  const formStyle = {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    width: '100%',
-    maxWidth: '400px',
-  };
-  const inputStyle = {
-    margin: '5px',
-    padding: '10px',
-    width: '100%',
-    fontSize: '16px',
-  };
+  // const formStyle = {
+  //   display: 'flex',
+  //   flexDirection: 'column',
+  //   alignItems: 'center',
+  //   width: '100%',
+  //   maxWidth: '400px',
+  // };
+  // const inputStyle = {
+  //   margin: '5px',
+  //   padding: '10px',
+  //   width: '100%',
+  //   fontSize: '16px',
+  // };
 
 
   const navHome = async () => {
