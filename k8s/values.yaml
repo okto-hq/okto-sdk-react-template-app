@@ -24,7 +24,7 @@ okto-sdk-react-template-app:
       failureThreshold: 10
       httpGet:
         path: /
-        port: 3000
+        port: 443
         scheme: HTTP
       initialDelaySeconds: 3
       periodSeconds: 2
@@ -52,7 +52,7 @@ okto-sdk-react-template-app:
     minReplicas: 1
     maxReplicas: 2
   env:
-    PORT: 443
+    PORT: "443"
   envFromSecrets:
     - variable: REACT_APP_OKTO_CLIENT_API_KEY
       secretId: &oktohq-sdk-docs oktohq/okto-sdk-react-template-app
