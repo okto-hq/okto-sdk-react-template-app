@@ -11,6 +11,9 @@ RUN npm install
 
 COPY . .
 
+RUN echo "REACT_APP_OKTO_CLIENT_API_KEY=dummydata" > .env
+RUN echo "REACT_APP_GOOGLE_CLIENT_ID=dummydata" >> .env
+
 RUN npm run build
 
 FROM node:20-alpine3.17 AS app
@@ -34,7 +37,7 @@ COPY  --chown=dcx:dcx  . .
 
 RUN ls -la
 
-# COPY --chown=dcx:dcx --from=build /app/package-lock.json ./package-lock.json
+COPY --chown=dcx:dcx --from=build /app/.env ./.env
 
 # only install production dependencies
 RUN npm ci --only=production
