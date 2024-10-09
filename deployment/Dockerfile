@@ -1,3 +1,4 @@
+# syntax=docker.io/docker/dockerfile:1.7-labs
 ## Above is added for using exclude in COPY statement.
 FROM node:20-alpine3.17 AS build
 
@@ -13,6 +14,8 @@ COPY . .
 
 
 RUN npm run build
+RUN npm install
+## Above is needed as npm run build is doing some changes and build fails with typescript version error
 
 FROM node:20-alpine3.17 AS app
 
@@ -32,7 +35,7 @@ WORKDIR /home/dcx/app
 COPY --chown=dcx:dcx --from=build /app/build ./build
 
 COPY  --chown=dcx:dcx  . .
-
+COPY --chown=dcx:dcx --from=build /app/package-lock.json ./package-lock.json
 RUN ls -la
 
 # only install production dependencies
