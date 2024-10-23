@@ -108,7 +108,7 @@ const HomePage = ({ authToken, handleLogout }) => {
       <ReadData handleLogout={handleLogout} authToken={authToken}/>
 
       <h2>Transfer Tokens</h2>
-      <h3>Note: When transferring native token of any chain, please enter the token_address as \" \" </h3>
+      <h3>Note: When transferring the native token of any chain, please enter the token_address as a single space </h3>
       <form style={formStyle} onSubmit={handleTransferTokens}>
         <input
           style={inputStyle}
