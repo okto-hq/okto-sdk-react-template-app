@@ -5,6 +5,7 @@ import LoginPage from './LoginPage';
 import HomePage from './HomePage';
 import RawTxnPage from './RawTxnPage';
 import WidgetPage from './WidgetPage';
+import ReadDataPage from "./ReadDataPage";
 
 
 const OKTO_CLIENT_API_KEY = process.env.REACT_APP_OKTO_CLIENT_API_KEY;
@@ -22,7 +23,8 @@ function App() {
          <Route path="/" element={<LoginPage setAuthToken={setAuthToken} authToken={authToken} handleLogout={handleLogout}/>} />
          <Route path="/home" element={authToken ? <HomePage authToken={authToken} handleLogout={handleLogout}/> : <Navigate to="/" />} />
          <Route path="/raw" element={authToken ? <RawTxnPage authToken={authToken} handleLogout={handleLogout}/> : <Navigate to="/" />} />
-         <Route path="/widget" element={authToken ? <WidgetPage authToken={authToken} handleLogout={handleLogout}/> : <Navigate to="/" />} />       
+         <Route path="/widget" element={authToken ? <WidgetPage authToken={authToken} handleLogout={handleLogout}/> : <Navigate to="/" />} />  
+         <Route path="/read" element={authToken ? <ReadDataPage authToken={authToken} handleLogout={handleLogout} /> : <Navigate to="/" />} />     
        </Routes>
      </OktoProvider>
    </Router>

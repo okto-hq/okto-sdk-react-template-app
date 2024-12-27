@@ -91,6 +91,15 @@ const HomePage = ({ authToken, handleLogout }) => {
     }
   };
 
+  const navReadData = async () => {
+    try {
+      console.log("going to read contract data page");
+      navigate("/read");
+    } catch (error) {
+      setError(`Failed to navigate: ${error.message}`);
+    }
+  };
+
   const navWidget = async () => {
     try {
       console.log("going to widget page");
@@ -184,6 +193,7 @@ const HomePage = ({ authToken, handleLogout }) => {
         <br/>
         <button style={buttonStyle} onClick={navRawTxn}>Try Raw Txn</button>
         <button style={buttonStyle} onClick={navWidget}>Try widgets</button>
+        <button style={buttonStyle} onClick={navReadData}>Try Raw Read</button>
       </div>
     </div>
     
