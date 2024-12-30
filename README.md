@@ -55,7 +55,7 @@ node okto-gauth-server.js
 
 The backend runs on `http://localhost:3001`.
 
-### 2. Frontend Setup
+### 3. Frontend Setup
 
 1. Navigate to the frontend project directory.
 
