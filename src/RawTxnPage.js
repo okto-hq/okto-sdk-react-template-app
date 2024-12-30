@@ -110,6 +110,15 @@ const RawTxnPage = ({ authToken, handleLogout }) => {
     }
   };
 
+  const navReadData = async () => {
+    try {
+      console.log("going to read contract data page");
+      navigate("/read");
+    } catch (error) {
+      setError(`Failed to navigate: ${error.message}`);
+    }
+  };
+
   return (
     <div style={containerStyle}>
       <h1>Raw Transactions</h1>
@@ -174,6 +183,7 @@ const RawTxnPage = ({ authToken, handleLogout }) => {
         <br/>
         <button style={buttonStyle} onClick={navHome}>go to home</button>
         <button style={buttonStyle} onClick={navWidget}>Try widgets</button>
+        <button style={buttonStyle} onClick={navReadData}>Try Raw Read</button>
       </div>
     </div>
   );
