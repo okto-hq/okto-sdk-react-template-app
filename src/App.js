@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { OktoProvider, useOkto, BuildType } from 'okto-sdk-react';
+import { OktoProvider, useOkto, BuildType, AuthType } from 'okto-sdk-react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './LoginPage';
 import HomePage from './HomePage';
@@ -10,9 +10,16 @@ import RawReadPage from "./RawReadPage";
 
 const OKTO_CLIENT_API_KEY = process.env.REACT_APP_OKTO_CLIENT_API_KEY;
 function App() {
+
+  const brandData = {
+    title: "Test APP",
+    subtitle: "Your gateway to the blockchain",
+    iconUrl: "https://www.okto.com/favicon.ico"
+  }
+
  return (
    <Router>
-     <OktoProvider apiKey={OKTO_CLIENT_API_KEY} buildType={BuildType.SANDBOX}>
+     <OktoProvider apiKey={OKTO_CLIENT_API_KEY} buildType={BuildType.SANDBOX} primaryAuth={AuthType.EMAIL} brandData={brandData} environment={"sandbox"}>
       <AppRoutes />
      </OktoProvider>
    </Router>

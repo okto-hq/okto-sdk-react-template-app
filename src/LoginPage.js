@@ -14,6 +14,7 @@ const LoginPage = ({ setAuthToken, authToken, handleLogout }) => {
     verifyEmailOTP,
     sendPhoneOTP,
     verifyPhoneOTP,
+    showOnboardingModal,
   } = useOkto();
 
   // Separate states for email and phone OTPs
@@ -381,6 +382,18 @@ const LoginPage = ({ setAuthToken, authToken, handleLogout }) => {
             </button>
           </div>
         )}
+      </div>
+
+      {/* Onboarding Modal Section */}
+      <div style={formSectionStyle}>
+        <h2>Onboarding Modal</h2>
+        <p>Complete onboarding flow using Okto's modal.</p>
+        <button 
+          style={buttonStyle} 
+          onClick={showOnboardingModal}
+        >
+          Show Onboarding Modal
+        </button>
       </div>
 
       {/* Error Display */}
