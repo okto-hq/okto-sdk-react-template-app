@@ -3,8 +3,8 @@ import { useOkto } from "okto-sdk-react";
 import { useNavigate } from "react-router-dom";
 import ReadData from './ReadData';
 
-const ReadDataPage = ({ authToken, handleLogout }) => {
-  console.log("ReadDataPage component rendered: ", authToken);
+const RawReadPage = ({ authToken, handleLogout }) => {
+  console.log("RawReadPage component rendered: ", authToken);
   const navigate = useNavigate();
   const { readContractData } = useOkto();
   const [readResponse, setReadResponse] = useState(null);
@@ -73,6 +73,15 @@ const ReadDataPage = ({ authToken, handleLogout }) => {
     try {
       console.log("going to home page");
       navigate("/home");
+    } catch (error) {
+      setError(`Failed to navigate: ${error.message}`);
+    }
+  };
+
+  const navRawTxn = async () => {
+    try {
+      console.log("going to raw txn page");
+      navigate("/raw");
     } catch (error) {
       setError(`Failed to navigate: ${error.message}`);
     }
@@ -154,9 +163,12 @@ const ReadDataPage = ({ authToken, handleLogout }) => {
         <button style={buttonStyle} onClick={navWidget}>
           Try Widgets
         </button>
+        <button style={buttonStyle} onClick={navRawTxn}>
+          Try RawTxn
+        </button>
       </div>
     </div>
   );
 };
 
-export default ReadDataPage;
+export default RawReadPage;
