@@ -253,6 +253,9 @@ const LoginPage = ({ setAuthToken, authToken, handleLogout }) => {
   return (
     <div style={containerStyle}>
       <h1 style={titleStyle}>Login</h1>
+      <p style={{ textAlign: "center", marginBottom: "20px", fontSize: "16px" }}>
+        This app supports the following login methods:
+      </p>
 
       {/* Google Login */}
       <div style={formSectionStyle}>
