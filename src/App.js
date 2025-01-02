@@ -12,53 +12,6 @@ import axios from 'axios';
 const OKTO_CLIENT_API_KEY = process.env.REACT_APP_OKTO_CLIENT_API_KEY;
 function App() {
 
-  const [authPromise, setAuthPromise] = useState(null);
-
-  const googleLogin = useGoogleLogin({
-    flow: "auth-code",
-    onSuccess: async ({ code }) => {
-      try {
-        const { data: tokens } = await axios.post("http://localhost:3001/auth/google", {
-          code,
-        });
-        if (authPromise) {
-          authPromise.resolve(tokens.id_token);
-        }
-      } catch (error) {
-        console.error("Error during token exchange:", error);
-        if (authPromise) {
-          authPromise.reject(error);
-        }
-      }
-    },
-    onError: (error) => {
-      console.error("Google Login Error:", error);
-      if (authPromise) {
-        authPromise.reject(error);
-      }
-    },
-  });
-
-  const handleGAuthCb = async () => {
-    console.log("Triggering Google Login...");
-    
-    // Create a new promise
-    let promiseResolve, promiseReject;
-    const promise = new Promise((resolve, reject) => {
-      promiseResolve = resolve;
-      promiseReject = reject;
-    });
-    
-    // Store the promise handlers
-    setAuthPromise({ resolve: promiseResolve, reject: promiseReject });
-    
-    // Trigger Google login
-    googleLogin();
-    
-    // Return the ID token when it's available
-    return promise;
-  };
-
   const brandData = {
     title: "Test APP",
     subtitle: "Your gateway to the blockchain",
@@ -67,7 +20,7 @@ function App() {
 
  return (
    <Router>
-     <OktoProvider apiKey={OKTO_CLIENT_API_KEY} buildType={BuildType.SANDBOX} gAuthCb={handleGAuthCb} primaryAuth={AuthType.EMAIL} brandData={brandData} environment={"sandbox"}>
+     <OktoProvider apiKey={OKTO_CLIENT_API_KEY} buildType={BuildType.SANDBOX} primaryAuth={AuthType.EMAIL} brandData={brandData} environment={"sandbox"}>
       <AppRoutes />
      </OktoProvider>
    </Router>
