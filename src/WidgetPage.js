@@ -55,10 +55,19 @@ const WidgetPage = ({ authToken, handleLogout }) => {
     }
   };
 
-    const navRawTxn = async () => {
+  const navRawTxn = async () => {
     try {
       console.log("going to raw txn page");
       navigate("/raw");
+    } catch (error) {
+      setError(`Failed to navigate: ${error.message}`);
+    }
+  };
+
+  const navReadData = async () => {
+    try {
+      console.log("going to read contract data page");
+      navigate("/read");
     } catch (error) {
       setError(`Failed to navigate: ${error.message}`);
     }
@@ -84,6 +93,7 @@ const WidgetPage = ({ authToken, handleLogout }) => {
         <br/>
         <button style={buttonStyle} onClick={navHome}>go to home</button>
         <button style={buttonStyle} onClick={navRawTxn}>Try rawtxn</button>
+        <button style={buttonStyle} onClick={navReadData}>Try Raw Read</button>
       </div>
     </div>
   );
