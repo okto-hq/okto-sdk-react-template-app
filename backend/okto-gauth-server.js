@@ -24,15 +24,4 @@ app.post("/auth/google", async (req, res) => {
   }
 });
 
-app.post("/auth/google/refresh-token", async (req, res) => {
-  try {
-    const { credentials } = await oAuth2Client.refreshAccessToken(req.body.refreshToken); // Obtain new tokens
-    console.log("New tokens:", credentials);
-    res.json(credentials);
-  } catch (error) {
-    console.error("Error refreshing tokens:", error);
-    res.status(500).send("Failed to refresh tokens");
-  }
-});
-
 app.listen(3001, () => console.log("Server is running on port 3001"));

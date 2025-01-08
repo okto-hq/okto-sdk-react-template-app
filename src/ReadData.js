@@ -8,10 +8,11 @@ const ReadData = ({ authToken, handleLogout }) => {
   const [userDetails, setUserDetails] = useState(null);
   const [portfolioData, setPortfolioData] = useState(null);
   const [wallets, setWallets] = useState(null);
+  const [authDetails, setAuthDetails] = useState(null);
   
   const [error, setError] = useState(null);
   const [activeSection, setActiveSection] = useState(null);
-  const { getUserDetails, getPortfolio, createWallet, logOut } = useOkto();
+  const { getUserDetails, getPortfolio, createWallet, logOut, getAuthDetails } = useOkto();
   
   const fetchUserDetails = async () => {
     try {
@@ -41,6 +42,15 @@ const ReadData = ({ authToken, handleLogout }) => {
       setError(`Failed to fetch wallets: ${error.message}`);
     }
   };
+  const fetchAuthDetails = () => {
+    try {
+      const details = getAuthDetails();
+      setAuthDetails(details);
+      setActiveSection('authDetails');
+    } catch (error) {
+      setError(`Failed to fetch authentication details: ${error.message}`);
+    }
+  };
   const logout = async () => {
     try {
       logOut();
@@ -65,6 +75,15 @@ const ReadData = ({ authToken, handleLogout }) => {
     fontSize: '16px',
     cursor: 'pointer',
   };
+  const textStyle = {
+    maxWidth: '600px',
+    wordWrap: 'break-word',
+    whiteSpace: 'pre-wrap',
+    fontFamily: 'monospace',
+    fontSize: '14px',
+    lineHeight: '1.5',
+    margin: '10px 0',
+  };
   // const formStyle = {
   //   display: 'flex',
   //   flexDirection: 'column',
@@ -87,6 +106,7 @@ const ReadData = ({ authToken, handleLogout }) => {
         <button style={buttonStyle} onClick={fetchUserDetails}>View User Details</button>
         <button style={buttonStyle} onClick={fetchPortfolio}>View Portfolio</button>
         <button style={buttonStyle} onClick={fetchWallets}>View Wallets</button>
+        <button style={buttonStyle} onClick={fetchAuthDetails}>View Auth Details</button>
         <button style={buttonStyle} onClick={logout}>Log Out</button>
       </div>
       {activeSection === 'userDetails' && userDetails && (
@@ -105,6 +125,19 @@ const ReadData = ({ authToken, handleLogout }) => {
         <div>
           <h2>Wallets:</h2>
           <pre>{JSON.stringify(wallets, null, 2)}</pre>
+        </div>
+      )}
+      {activeSection === 'authDetails' && authDetails && (
+        <div>
+          <h2>Auth Details:</h2>
+          <div style={textStyle}>
+            {Object.entries(authDetails).map(([key, value]) => (
+              <div key={key}>
+                <strong>{key}:</strong>
+                <span style={{ display: 'block', wordBreak: 'break-all', marginLeft: '10px' }}>{value}</span>
+              </div>
+            ))}
+          </div>
         </div>
       )}
       {error && (

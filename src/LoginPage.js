@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useOkto } from "okto-sdk-react";
 import { GoogleLogin } from "@react-oauth/google";
+import Select from "react-select";
+import countryList from "react-select-country-list";
 
 const LoginPage = ({ setAuthToken, authToken, handleLogout }) => {
 
@@ -22,11 +24,13 @@ const LoginPage = ({ setAuthToken, authToken, handleLogout }) => {
   const [emailOtp, setEmailOtp] = useState("");
   const [phone, setPhone] = useState("");
   const [phoneOtp, setPhoneOtp] = useState("");
-  const [countryShortName, setCountryShortName] = useState("IN");
+  const [countryShortName, setCountryShortName] = useState({ value: "IN", label: "India" });
   
   // Separate tokens for each method
   const [emailToken, setEmailToken] = useState("");
   const [phoneToken, setPhoneToken] = useState("");
+
+  const countryOptions = countryList().getData();
   
   const [authMethod, setAuthMethod] = useState("");
   const [error, setError] = useState("");
@@ -57,11 +61,6 @@ const LoginPage = ({ setAuthToken, authToken, handleLogout }) => {
   const validatePhone = (phone) => {
     return phone.length >= 10 && /^\d+$/.test(phone);
   };
-
-  const validateCountryCode = (code) => {
-    return code.length === 2 && /^[A-Z]+$/.test(code);
-  };
-
 
   const handleGoogleLogin = async (credentialResponse) => {
     try {
@@ -136,8 +135,8 @@ const LoginPage = ({ setAuthToken, authToken, handleLogout }) => {
       return;
     }
 
-    if (!validateCountryCode(countryShortName)) {
-      setError("Please enter a valid country code (e.g., IN)");
+    if (!countryShortName?.value) {
+      setError("Please select a valid country code");
       return;
     }
 
@@ -145,7 +144,7 @@ const LoginPage = ({ setAuthToken, authToken, handleLogout }) => {
     setError("");
 
     try {
-      const response = await sendPhoneOTP(phone, countryShortName);
+      const response = await sendPhoneOTP(phone, countryShortName.value);
       if (response?.token) {
         setPhoneToken(response.token);
         setAuthMethod("phone");
@@ -170,7 +169,7 @@ const LoginPage = ({ setAuthToken, authToken, handleLogout }) => {
     setError("");
 
     try {
-      const response = await verifyPhoneOTP(phone, countryShortName, phoneOtp, phoneToken);
+      const response = await verifyPhoneOTP(phone, countryShortName.value, phoneOtp, phoneToken);
       if (response?.auth_token) {
         setAuthToken(response.auth_token);
         setError("");
@@ -279,14 +278,16 @@ const LoginPage = ({ setAuthToken, authToken, handleLogout }) => {
         <h2>Email Authentication</h2>
         <p>Secure authentication using email OTP.</p>
         <div style={{ marginBottom: '10px' }}>
-          <input
-            style={inputStyle}
-            type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            disabled={isEmailSending}
-          />
+          <div style={{ display: "flex", gap: "10px" }}>
+            <input
+              style={inputStyle}
+              type="email"
+              placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={isEmailSending}
+            />
+          </div>
           <button 
             style={{
               ...buttonStyle,
@@ -302,14 +303,16 @@ const LoginPage = ({ setAuthToken, authToken, handleLogout }) => {
 
         {authMethod === "email" && (
           <div style={{ marginTop: '10px' }}>
-            <input
-              style={inputStyle}
-              type="text"
-              placeholder="Enter OTP"
-              value={emailOtp}
-              onChange={(e) => setEmailOtp(e.target.value)}
-              disabled={isEmailVerifying}
-            />
+            <div style={{ display: "flex", gap: "10px" }}>
+              <input
+                style={inputStyle}
+                type="text"
+                placeholder="Enter OTP"
+                value={emailOtp}
+                onChange={(e) => setEmailOtp(e.target.value)}
+                disabled={isEmailVerifying}
+              />
+            </div>
             <button 
               style={{
                 ...buttonStyle,
@@ -329,19 +332,21 @@ const LoginPage = ({ setAuthToken, authToken, handleLogout }) => {
       <div style={formSectionStyle}>
         <h2>Phone Authentication</h2>
         <p>Secure authentication using phone OTP.</p>
-        <div style={{ marginBottom: '10px' }}>
+        <div>
+          <Select
+            options={countryOptions}
+            value={countryShortName}
+            onChange={setCountryShortName}
+            isDisabled={isPhoneSending}
+            getOptionLabel={(e) => `${e.label} (${e.value})`} // Custom label format
+            styles={{
+              container: (base) => ({ ...base, marginBottom: "10px" }),
+              option: (base) => ({ ...base, display: "flex", justifyContent: "space-between" }),
+            }}
+          />
           <div style={{ display: "flex", gap: "10px" }}>
             <input
-              style={{ ...inputStyle, width: "30%" }}
-              type="text"
-              placeholder="IN"
-              value={countryShortName}
-              onChange={(e) => setCountryShortName(e.target.value.toUpperCase())}
-              disabled={isPhoneSending}
-              maxLength={2}
-            />
-            <input
-              style={{ ...inputStyle, width: "70%" }}
+              style={{ width: "100%", padding: "10px", marginBottom: "10px" }}
               type="tel"
               placeholder="Enter phone number"
               value={phone}
@@ -349,11 +354,14 @@ const LoginPage = ({ setAuthToken, authToken, handleLogout }) => {
               disabled={isPhoneSending}
             />
           </div>
-          <button 
+          <button
             style={{
-              ...buttonStyle,
-              opacity: isPhoneSending ? 0.7 : 1,
-              cursor: isPhoneSending ? 'not-allowed' : 'pointer'
+              padding: "10px",
+              backgroundColor: "#007BFF",
+              color: "#fff",
+              border: "none",
+              cursor: "pointer",
+              width: "100%",
             }}
             onClick={handleSendPhoneOTP}
             disabled={isPhoneSending || !phone || !countryShortName}
@@ -364,14 +372,16 @@ const LoginPage = ({ setAuthToken, authToken, handleLogout }) => {
 
         {authMethod === "phone" && (
           <div style={{ marginTop: '10px' }}>
-            <input
-              style={inputStyle}
-              type="text"
-              placeholder="Enter OTP"
-              value={phoneOtp}
-              onChange={(e) => setPhoneOtp(e.target.value)}
-              disabled={isPhoneVerifying}
-            />
+            <div style={{ display: "flex", gap: "10px" }}>
+              <input
+                style={inputStyle}
+                type="text"
+                placeholder="Enter OTP"
+                value={phoneOtp}
+                onChange={(e) => setPhoneOtp(e.target.value)}
+                disabled={isPhoneVerifying}
+              />
+            </div>
             <button 
               style={{
                 ...buttonStyle,
