@@ -145,6 +145,13 @@ const RawTxnPage = ({ authToken, handleLogout }) => {
           onChange={handleInputChange}
           required
         />
+        <p style={{ fontSize: '14px', color: '#666', marginTop: '8px' }}>
+          Sample Raw Transaction Object for <strong>EVM</strong>: 
+          <code style={{ display: 'block', whiteSpace: 'pre-wrap', wordBreak: 'break-word', backgroundColor: '#f9f9f9', padding: '8px', borderRadius: '4px', marginTop: '4px' }}>
+            {"{\n  \"from\": \"0xYourSenderAddress\",\n  \"to\": \"0xRecipientAddress\",\n  \"data\": \"0x\",\n  \"value\": \"0x100000\"\n}"}
+          </code>
+          For transaction formats for <strong>Aptos</strong> and <strong>Solana</strong>, check out the documentation <a href="https://docs.okto.tech/docs/react-sdk/advanced-sdk-config/okto-embedded-wallet/use-user-embedded-wallet/raw-transactions#parameters-1" target="_blank" rel="noopener noreferrer">here</a>.
+        </p>
         <button style={buttonStyle} type="submit">Execute Raw Transaction</button>
       </form>
       {activeSection === 'transferResponse' && transferResponse && (
